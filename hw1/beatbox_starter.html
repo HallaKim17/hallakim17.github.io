@@ -76,14 +76,14 @@
         document.getElementById(volume_label_id[i]).innerHTML = 'Volume:  ' + vol + 'dB'; 
     }
     var kick = new XMLHttpRequest();
-    kick.open("Get","audio/kick_1.wav",true);   //  <---- replace this file with yours
+    kick.open("Get","kick_1.wav",true);   //  <---- replace this file with yours
     kick.responseType = "arraybuffer";
     kick.onload = function(){
         context.decodeAudioData(kick.response, function(buffer){buffers[0] = buffer;});
     }
     kick.send();
     var snare = new XMLHttpRequest();
-    snare.open("Get","audio/snare_1.wav",true);  //  <---- replace this file with yours
+    snare.open("Get","/audio/snare_1.wav",true);  //  <---- replace this file with yours
     snare.responseType = "arraybuffer";
     snare.onload = function(){
         context.decodeAudioData(snare.response, function(buffer){buffers[1] = buffer;});
