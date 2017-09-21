@@ -7,14 +7,14 @@
 </head>
 
 <style>
-    button {
+    button{
         padding: 5px;
         background: rgb(200, 200, 200);
         border: 1px solid rgb(122, 122, 122);
         border-radius: 2px;
         outline: none;
         width:120px;
-        height:120px;
+        height:100px;
         font-size:15px
     }
     button.active, button:active {
@@ -22,6 +22,21 @@
         border: 1px solid rgb(0,0,0);
         box-shadow: 0 0 2px 0 rgb(0,0,0);
     }
+    div#song{
+        width:300px;
+        height:130px;
+        background-color: powderblue;
+    }
+    button#sample_song{
+        width:300;
+        height:200;
+        float:center;
+    }
+    #stop_song{
+        width:300;
+        height:200;
+        float:right;
+    }    
     div#kick{
         width:130px;
         height:600px;
@@ -37,6 +52,7 @@
         height:600px;
         float:left;
     }
+
     input.volume {
         width:120px;
         height:10px;
@@ -46,6 +62,15 @@
 <body>
 
 <h1> Homework#1: Beatbox </h1>
+<h3> 20174251 Halla Kim </h3>
+<br>
+<p>
+    <div id = "song">    
+        <button id="sample_song" onmousedown="playsong()"> Play a song 'girl' by Lee Mun-se </button>
+        <button id="stop_song" onmousedown="stopsong()"> Stop this song </button>
+    </div>
+</p>
+<br>
 <br>
 <div id = "kick" align = "center">
     <button id="kickPad" onmousedown="playdrum(0)" > Kick ('a' key)</button>
@@ -65,7 +90,7 @@
 
 <script>
     var context = new (window.AudioContext || window.webkitAudioContext)();
-    var buffers = new Array(3); // 0 : kick, 1 : snare, 2 : hihat
+    var buffers = new Array(4); // 0 : kick, 1 : snare, 2 : hihat, 3 : sample_song 
     var volume_id = new Array("kickVol","snareVol","hihatVol");
     var volume_label_id = new Array("kickVolLabel","snareVolLabel","hihatVolLabel");
     var gain_nodes = new Array(3);
@@ -76,7 +101,7 @@
         document.getElementById(volume_label_id[i]).innerHTML = 'Volume:  ' + vol + 'dB'; 
     }
     var kick = new XMLHttpRequest();
-    kick.open("Get","kick_1.wav",true);   //  <---- replace this file with yours
+    kick.open("Get","/audio/kick_1.wav",true);   //  <---- replace this file with yours
     kick.responseType = "arraybuffer";
     kick.onload = function(){
         context.decodeAudioData(kick.response, function(buffer){buffers[0] = buffer;});
@@ -90,7 +115,7 @@
     }
     snare.send();
     var hihat = new XMLHttpRequest();
-    hihat.open("Get","audio/hihat_1.wav",true);  //  <---- replace this file with yours
+    hihat.open("Get","/audio/hihat_1.wav",true);  //  <---- replace this file with yours
     hihat.responseType = "arraybuffer";
     hihat.onload = function(){
         context.decodeAudioData(hihat.response, function(buffer){buffers[2] = buffer;});
@@ -120,9 +145,36 @@
     function db2gain(changed_db) {
         var gain = 1.0;
         // inverse function of gain to db
-        gain_val = Math.pow(10, changed_db_val/20.0)
-        return gain
+        gain_val = Math.pow(10, changed_db/20.0)
+        return gain_val
     }
+
+    // play sample song
+    var song = new XMLHttpRequest();
+    song.open("Get", "/audio/sample_song.wav", true);
+    song.responseType = "arraybuffer";
+    song.onload = function(){
+        context.decodeAudioData(song.response, function(buffer){buffers[3] = buffer;});
+    }
+    song.send();
+
+
+    function playsong() {
+        source = context.createBufferSource();
+        source.buffer = buffers[3];
+        
+        source.connect(context.destination);
+      
+        source.start();
+    }
+
+    function stopsong() {
+        if (source) {
+            source.stop();
+        }
+    }
+
+
     // keyboard mapping 
     function keyboardDown(key) {
         switch (key.keyCode) {
