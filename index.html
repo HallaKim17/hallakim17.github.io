@@ -84,7 +84,7 @@
     }
 
     var kick = new XMLHttpRequest();
-    kick.open("Get","/Users/bkim/mac/hallakim17.github.io/hw1/kick_1.wav",true);   //  <---- replace this file with yours
+    kick.open("Get","/hw1/kick_1.wav",true);   //  <---- replace this file with yours
     kick.responseType = "arraybuffer";
     kick.onload = function(){
         context.decodeAudioData(kick.response, function(buffer){buffers[0] = buffer;});
