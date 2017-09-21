@@ -1,6 +1,6 @@
 <!doctype html>
 <html>
-
+  
 <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title> Beatbox</title>
@@ -17,13 +17,11 @@
         height:120px;
         font-size:15px
     }
-
     button.active, button:active {
         background: rgb(100, 100, 100);
         border: 1px solid rgb(0,0,0);
         box-shadow: 0 0 2px 0 rgb(0,0,0);
     }
-
     div#kick{
         width:130px;
         height:600px;
@@ -39,12 +37,10 @@
         height:600px;
         float:left;
     }
-
     input.volume {
         width:120px;
         height:10px;
     }
-
 </style>
 
 <body>
@@ -69,78 +65,64 @@
 
 <script>
     var context = new (window.AudioContext || window.webkitAudioContext)();
-
     var buffers = new Array(3); // 0 : kick, 1 : snare, 2 : hihat
     var volume_id = new Array("kickVol","snareVol","hihatVol");
     var volume_label_id = new Array("kickVolLabel","snareVolLabel","hihatVolLabel");
     var gain_nodes = new Array(3);
-
     for (i  = 0; i < 3; i++) {
         gain_nodes[i] = context.createGain();
         var vol = document.getElementById(volume_id[i]).value;
         gain_nodes[i].gain.value = db2gain(vol);
         document.getElementById(volume_label_id[i]).innerHTML = 'Volume:  ' + vol + 'dB'; 
     }
-
     var kick = new XMLHttpRequest();
-    kick.open("Get","test.wav",true);   //  <---- replace this file with yours
+    kick.open("Get","audio/kick_1.wav",true);   //  <---- replace this file with yours
     kick.responseType = "arraybuffer";
     kick.onload = function(){
         context.decodeAudioData(kick.response, function(buffer){buffers[0] = buffer;});
     }
     kick.send();
-
     var snare = new XMLHttpRequest();
-    snare.open("Get","test.wav",true);  //  <---- replace this file with yours
+    snare.open("Get","audio/snare_1.wav",true);  //  <---- replace this file with yours
     snare.responseType = "arraybuffer";
     snare.onload = function(){
         context.decodeAudioData(snare.response, function(buffer){buffers[1] = buffer;});
     }
     snare.send();
-
     var hihat = new XMLHttpRequest();
-    hihat.open("Get","test.wav",true);  //  <---- replace this file with yours
+    hihat.open("Get","audio/hihat_1.wav",true);  //  <---- replace this file with yours
     hihat.responseType = "arraybuffer";
     hihat.onload = function(){
         context.decodeAudioData(hihat.response, function(buffer){buffers[2] = buffer;});
     }
     hihat.send();
-
-
     window.onload=function(){
         window.addEventListener('keydown', function (key) {
             keyboardDown(key);
         }, false);
-
         window.addEventListener('keyup', function (key) {
             keyboardUp(key);
         }, false);
     }
-
-
     function playdrum(i) {
-        //
-        //
-        // fill out this funciton
-        //
-        //
+        source = context.createBufferSource();
+        source.buffer = buffers[i];
+        
+        source.connect(gain_nodes[i]);
+        gain_nodes[i].connect(context.destination);
+      
+        source.start();
     }
-
     function changegain(i,changedvalue){
         gain_nodes[i].gain.value = db2gain(changedvalue);
         document.getElementById(volume_label_id[i]).innerHTML = 'Volume:  ' + changedvalue + 'dB'; 
     }
-
-    function db2gain(db_gain) {
+    function db2gain(changed_db) {
         var gain = 1.0;
-        //
-        //
-        // fill out this funciton
-        //
-        //
+        // inverse function of gain to db
+        gain_val = Math.pow(10, changed_db_val/20.0)
         return gain
     }
-
     // keyboard mapping 
     function keyboardDown(key) {
         switch (key.keyCode) {
@@ -161,7 +143,6 @@
                 break;
         }
     }
-
     function keyboardUp(key) {
         switch (key.keyCode) {
             case 65: //'a'
@@ -178,7 +159,6 @@
                 break;
         }
     }
-
     // simulated mousedown on buttons
     function simulateClick(element) {
         var event = new MouseEvent("mousedown", {
@@ -188,8 +168,9 @@
         });
         element.dispatchEvent(event);
     }
-
 </script>
 </body>
 
+</html>
+  
 </html>
