@@ -151,7 +151,7 @@
 
     // play sample song
     var song = new XMLHttpRequest();
-    song.open("Get", "/audio/sample_song.wav", true);
+    song.open("Get", "audio/sample_song.wav", true);
     song.responseType = "arraybuffer";
     song.onload = function(){
         context.decodeAudioData(song.response, function(buffer){buffers[3] = buffer;});
