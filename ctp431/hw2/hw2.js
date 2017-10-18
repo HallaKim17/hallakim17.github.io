@@ -1,14 +1,18 @@
-var x = 0;
+var song;
+
+function preload() {
+	song = loadSound("mySong.mp3");
+	console.log("loading complete")
+}
 
 function setup() {
-	createcanvas(600, 400);
+	createCanvas(2000, 1600);
+	song = loadSound("mySong.mp3");
+	song.play();
 }
 
 function draw() {
 	background(0);
-	stroke(255);
-	strokeWeight(4);
-	nofill();
-	ellipse(x, 200, 100, 100);
+
 }
 
