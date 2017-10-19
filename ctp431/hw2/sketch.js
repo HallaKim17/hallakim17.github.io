@@ -1,5 +1,6 @@
 var song;
 var button;
+var amp;
 
 function toggleSong() {
 	if (song.isPlaying()) {
@@ -14,7 +15,7 @@ function preload() {
 }
 
 function setup() {
-	createCanvas(600, 400);
+	createCanvas(200, 200);
 	button = createButton('toggle');
 	button.mousePressed(toggleSong);
 	song.play();
@@ -24,5 +25,5 @@ function setup() {
 function draw() {
 	background(0);
 	var vol = amp.getLevel();
-	ellipse(300, 200, 200, vol * 300)
+	ellipse(100, 100, 200, vol * 200)
 }
