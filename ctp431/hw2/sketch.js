@@ -2,16 +2,22 @@ var song;
 var button;
 var amp;
 
+var osc, envelope, fft;
+var scaleArray = [60, 62, 64, 65, 67, 69, 71, 72];
+var note = 0;
+
+
+
+function preload() {
+	song = loadSound("mySong.mp3")
+}
+
 function toggleSong() {
 	if (song.isPlaying()) {
 		song.pause();
 	} else {
 		song.play();
 	}
-}
-
-function preload() {
-	song = loadSound("mySong.mp3")
 }
 
 function setup() {
@@ -21,26 +27,23 @@ function setup() {
 	song.play();
 	amp = new p5.Amplitude();
 
-
+	envelope = new p5.Env();
+	envelope.setADSR(0.001, 0.5, 0.1, 0.5);
+	envelope.setRange(1,0);
+	fft = new p5.FFT();
+	noStroke();
 }
+
 
 function draw() {
 	background(250);
-    rotateY(frameCount * 0.01);
 
-    for(var j=0; j<5; j++){
-    	push();
-    	for(var i=0; i<80; i++){
-    		translate(sin(frameCount * 0.001 + j) * 100, sin(frameCount * 0.001 + j) * 100, i * 0.1);
-    		rotateZ(frameCount * 0.002);
-    		push();
-    		sphere(8,6,4);
-    		pop();
-    	}
-    	pop();
-    }	
+    if (frameCount % 60 == 0 || framecount == 1) {
+    	var midiValue = scaleArray[note];
+    	var freqValue = midiToFreq(midiValue);
+    	song.freq(freqValue);
 
-	var vol = amp.getLevel();
-	stroke(255);
-	ellipse(100, 100, 100, vol * 100)
+    	envelope.play(osc, 0, 0.1);
+    	note = (note + 1) % scaleArray.length;
+    }
 }
