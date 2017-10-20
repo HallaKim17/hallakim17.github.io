@@ -2,9 +2,7 @@ var song;
 var button;
 var amp;
 
-var osc, envelope, fft;
-var scaleArray = [60, 62, 64, 65, 67, 69, 71, 72];
-var note = 0;
+var envelope, fft;
 
 
 
@@ -21,7 +19,9 @@ function toggleSong() {
 }
 
 function setup() {
-	createCanvas(windowWidth, windowHeight, WEBGL);
+	var canvas = createCanvas(windowWidth, windowHeight, WEBGL);
+	canvas.mouseClicked(toggleSong);
+
 	button = createButton('toggle');
 	button.mousePressed(toggleSong);
 	song.play();
@@ -30,20 +30,20 @@ function setup() {
 	envelope = new p5.Env();
 	envelope.setADSR(0.001, 0.5, 0.1, 0.5);
 	envelope.setRange(1,0);
+	
 	fft = new p5.FFT();
-	noStroke();
 }
 
 
 function draw() {
 	background(250);
 
-    if (frameCount % 60 == 0 || framecount == 1) {
-    	var midiValue = scaleArray[note];
-    	var freqValue = midiToFreq(midiValue);
-    	song.freq(freqValue);
-
-    	envelope.play(osc, 0, 0.1);
-    	note = (note + 1) % scaleArray.length;
+    var spectrum = fft.analyze();
+	noStroke();
+	fill(0,255,0);
+    for (var i=0; i<spectrum.length; i++){
+    	var x = map(i, 0, spectrum.length, 0, windowWidth);
+    	var h = -windowHeight + map(spectrum[i], 0, 255, height, 0);
+    	rect(x, windowHeight, windowWidth / spectrum.length, h)
     }
 }
