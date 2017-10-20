@@ -25,5 +25,6 @@ function setup() {
 function draw() {
 	background(0);
 	var vol = amp.getLevel();
-	ellipse(100, 100, 200, vol * 200)
+	stroke(255);
+	ellipse(100, 100, 100, vol * 100)
 }
