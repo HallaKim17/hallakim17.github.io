@@ -22,7 +22,7 @@ function draw() {
         stroke(150, 130, 0); 
         strokeWeight(10);
         strokeCap(ROUND);
-        r = 1;
+        var r = 1;
         var x = r * cos(p);
         var y = r * sin(p);
         vertex(x, y);
