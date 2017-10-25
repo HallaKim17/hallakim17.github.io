@@ -18,7 +18,7 @@ function draw() {
     p = map(vol, 0, 1, 0, 360)
 
     beginShape();
-    for (var p = 0;, p < 360; p++) {
+    for (var p = 0; p < 360; p++) {
         stroke(150, 130, 0); 
         strokeWeight(10);
         strokeCap(ROUND);
