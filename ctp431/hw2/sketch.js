@@ -1,13 +1,14 @@
 function setup() {
 	var canvas = createCanvas(700, 500);
-	angleMode(DEGREES);
+	//angleMode(DEGREES);
     mic = new p5.AudioIn();
     mic.start();
+    translate(window.width/2,window.height/2);
 }
 
 
 function draw() {
-	background(200);
+	//background(200);
     
     var vol = mic.getLevel();
 
