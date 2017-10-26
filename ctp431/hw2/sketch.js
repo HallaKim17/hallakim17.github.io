@@ -2,13 +2,24 @@ var volhistory = [];
 var fft;
 var mic;
 var col;
+var w;
+
 
 function setup() {
-	var canvas = createCanvas(700, 500);
-	//angleMode(DEGREES);
+	var width = 700;
+    var height = 500;
+	var canvas = createCanvas(width, height);
+	colorMode(HSB);
+	
+	//perspective(45 / 180 * PI, width/height, 0.5, 0);
+	var fov = 45 / 180 * PI;
+  	var cameraZ = (height/2.0) / tan(fov/2.0);
+  	perspective(fov, windowWidth/windowHeight, cameraZ * 0.1, cameraZ * 10);
+	
     mic = new p5.AudioIn();
     mic.start();
-	fft = new p5.FFT();
+	fft = new p5.FFT(0.9, 64);
+	w = width / 64;
 	fft.setInput(mic);
 }
 
@@ -16,17 +27,22 @@ function setup() {
 function draw() {
 	background(200);
     
+    // viewer's pespective
+	camera(0, 300, 500);
+	
     var vol = mic.getLevel();
 	volhistory.push(vol);
 
-	translate(350, 250);
+	translate(230, 410);
 	
 	var spectrum = fft.analyze();
 	
 	for (var i = 0; i < spectrum.length; i++) {
-		var x = map(i, 0, spectrum.length, 10, 650); 
-	    var h = -500 + map(spectrum[i], 0, 255, 500, 0);
-		rect(x, 500, 700/spectrum.length, h);
+		var amp = spectrum[i];
+		var y = map(amp, 0, 256, height, 0);
+		fill(i*3.5, 255, 255);
+		rect(i*w, y, w - 3, height - y);
+		
 	}
 	
 	stroke(spectrum[i], spectrum[i+30], spectrum[i+50]);
