@@ -43,13 +43,13 @@ function setup() {
 
 function preload() {
 	song = loadSound("Klaatu.mp3");
-	document.getElementById("loading").innerHTML = "Loading...";
+	createP("Loading...");
 
 }
 
 function loaded() {
 	console.log("loaded")
-	document.getElementById("loading").innerHTML = "Song Loaded";
+	createP("Song Loaded");
 }
 
 function togglePlaying() {
