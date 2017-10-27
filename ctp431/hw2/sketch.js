@@ -33,7 +33,7 @@ function setup() {
     mic = new p5.AudioIn();
     mic.start();
     fft = new p5.FFT(0.9, 1024);
-	fft.setInput(mic);
+	//fft.setInput(mic);
     
 	w = width / 200;
 }
