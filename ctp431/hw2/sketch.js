@@ -25,7 +25,7 @@ function setup() {
 	
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
-	button.position(60,60);
+	button.position(10,85);
     button.size(30);
 
 	for (var i=0; i<50; i++) {
