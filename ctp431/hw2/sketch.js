@@ -1,7 +1,5 @@
-var volhistory = [];
 var fft;
 var mic;
-var col;
 var w;
 var width;
 var height;
@@ -34,11 +32,10 @@ function setup() {
 
     mic = new p5.AudioIn();
     mic.start();
+    fft = new p5.FFT(0.9, 1024);
 	fft.setInput(mic);
     
-	fft = new p5.FFT(0.9, 1024);
 	w = width / 200;
-
 }
 
 function preload() {
