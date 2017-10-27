@@ -5,6 +5,8 @@ var col;
 var w;
 var width;
 var height;
+var sum = 0;
+var button;
 
 //balls
 var balls = [];     
@@ -18,37 +20,47 @@ var accChangeT = 0;
 
 function setup() {
 	width = 1000;
-    height = 750;
+    height = 500;
 	var canvas = createCanvas(width, height);
 	colorMode(HSB);
 	
-	/*perspective(45 / 180 * PI, width/height, 0.5, 0);
-	var fov = 45 / 180 * PI;
-  	var cameraZ = (height/2.0) / tan(fov/2.0);
-  	perspective(fov, windowWidth/windowHeight, cameraZ * 0.1, cameraZ * 10);*/
+	//load song
+	song = loadSound("Klaatu.mp3", loaded);
+	button = createButton("play");
+	button.mousePressed(togglePlaying);
+
 	
-	for (var i=0; i<20; i++) {
+	for (var i=0; i<50; i++) {
         balls.push(new Ball());
     }
 	
     mic = new p5.AudioIn();
     mic.start();
 	fft = new p5.FFT(0.9, 1024);
-	w = width / 130;
+	w = width / 200;
 	fft.setInput(mic);
 }
 
+
+function loaded() {
+	console.log("loaded")
+}
+
+function togglePlaying() {
+	song.play();
+	//song.setVolume(0.3);
+}
 
 // Ball class
 function Ball() {
     this.x = random(width);
     this.y = random(height);
-    this.diameter = random(10, 30);
+    this.diameter = random(5, 10);
     this.xspeed = random(-2, 2);
     this.yspeed = random(-2, 2);
     this.oxspeed = this.xspeed;
     this.oyspeed = this.yspeed;
-    this.direction = 0.7;
+    this.direction = 0.06;
 
     this.move = function() {
         this.x += this.xspeed * this.direction;
@@ -77,6 +89,7 @@ function Ball() {
 	
 	this.show = function() {
 		stroke(0);
+		fill(random(60,70),random(10,20),random(90,100));
         ellipse(this.x, this.y, this.diameter, this.diameter);
 	}
 }
@@ -84,28 +97,28 @@ function Ball() {
 
 
 function draw() {
-	background(200);
+	background(135,85,5);
     
     // viewer's pespective
 	//camera(100, 300, -300);
 	
     var vol = mic.getLevel();
 	volhistory.push(vol);
+	ellipse(250, 100, 50+vol*360, 50+vol*360);
 	
 	var spectrum = fft.analyze();
 
-    var sum = 0;
-	for (var j = 0; j < spectrum.length; j++) {
-		sum = sum + spectrum[j];
+
+	for (var i = 0; i < spectrum.length; i++) {
+		sum = sum + spectrum[i];
 	}
 
-    noFill();
 	strokeWeight(0.03);
 	
 	for (var i = 0; i < spectrum.length; i++) {
 		var nor_amp = (spectrum[i]/sum) * width;
-		fill(i*2.5, 155, 60);
-		rect(i*w, 400 - spectrum[i], nor_amp, height);
+		fill(i*2.5, 245, 80);
+		arc(i*w, height - spectrum[i], w, height, HALF_PI, PI);
 	}
 	
 	for (var j=0; j<balls.length; j++) { 
