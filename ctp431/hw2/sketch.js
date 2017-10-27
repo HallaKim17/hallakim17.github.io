@@ -17,11 +17,7 @@ var accChangeY = 0;
 var accChangeT = 0;
 
 
-function preload() {
-	song = loadSound("Klaatu.mp3");
-	document.getElementById("loading").innerHTML = "Loading...";
 
-}
 
 function setup() {
 	width = 1000;
@@ -31,20 +27,25 @@ function setup() {
 	
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
-	button = createButton("microphone");
-	button.mousePressed(micStart);
 
-	
 	for (var i=0; i<50; i++) {
         balls.push(new Ball());
     }
-	
+
+    mic = new p5.AudioIn();
+    mic.start();
+	fft.setInput(mic);
     
 	fft = new p5.FFT(0.9, 1024);
 	w = width / 200;
 
 }
 
+function preload() {
+	song = loadSound("Klaatu.mp3");
+	document.getElementById("loading").innerHTML = "Loading...";
+
+}
 
 function loaded() {
 	console.log("loaded")
@@ -59,12 +60,6 @@ function togglePlaying() {
 		song.pause();
 		button.html("play");
 	}
-}
-
-function micStart() {
-	mic = new p5.AudioIn();
-    mic.start();
-	fft.setInput(mic);
 }
 
 
@@ -120,7 +115,6 @@ function draw() {
 	//camera(100, 300, -300);
 	
     var vol = mic.getLevel();
-	volhistory.push(vol);
 	ellipse(250, 100, 50+vol*360, 50+vol*360);
 	
 	var spectrum = fft.analyze();
@@ -146,21 +140,6 @@ function draw() {
         	this.y = 400 - spectrum[floor(balls[j].x)];
 			this.direction = -this.direction;*/
 	}
-
-    //checkForShake();
-	
-	/*beginShape();
-	for (var i = 0; i < 10000; i++) {
-        var r = map(volhistory[i], 0, 1, 10, 600);
-	    var x = r * cos(i);
-		var y = r * sin(i);
-		ellipse(x,y,r,r);
-	}
-	//endShape();
-
-    if (volhistory.length > 10000) {
-	    volhistory.splice(0, 1);
-	}*/
 }
 	
 
