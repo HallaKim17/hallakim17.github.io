@@ -7,6 +7,7 @@ var width;
 var height;
 var sum = 0;
 var button;
+var song;
 
 //balls
 var balls = [];     
@@ -16,7 +17,9 @@ var accChangeY = 0;
 var accChangeT = 0;
 
 
-
+function preload() {
+	song = loadSound("Klaatu.mp3");
+}
 
 function setup() {
 	width = 1000;
@@ -24,8 +27,6 @@ function setup() {
 	var canvas = createCanvas(width, height);
 	colorMode(HSB);
 	
-	//load song
-	song = loadSound("Klaatu.mp3", loaded);
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
 
@@ -47,8 +48,13 @@ function loaded() {
 }
 
 function togglePlaying() {
-	song.play();
-	//song.setVolume(0.3);
+	if (!song.isPlaying()) {
+		song.play();
+        button.html("pause");
+	} else {
+		song.pause();
+		button.html("play");
+	}
 }
 
 // Ball class
