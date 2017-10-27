@@ -1,5 +1,5 @@
 var fft;
-//var mic;
+var mic;
 var w;
 var width;
 var height;
@@ -30,10 +30,9 @@ function setup() {
         balls.push(new Ball());
     }
 
-    //mic = new p5.AudioIn();
-    //mic.start();
+    mic = new p5.AudioIn();
+    mic.start();
     fft = new p5.FFT(0.9, 1024);
-	//fft.setInput(mic);
     
 	w = width / 200;
 }
@@ -47,6 +46,7 @@ function preload() {
 function loaded() {
 	console.log("loaded")
 	createP("Song Loaded");
+    fft.setInput(song);
 }
 
 function togglePlaying() {
@@ -111,7 +111,7 @@ function draw() {
     // viewer's pespective
 	//camera(100, 300, -300);
 	
-    var vol = song.getLevel();
+    var vol = mic.getLevel();
 	ellipse(250, 100, 50+vol*360, 50+vol*360);
 	
 	var spectrum = fft.analyze();
