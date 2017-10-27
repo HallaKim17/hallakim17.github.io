@@ -25,7 +25,8 @@ function setup() {
 	
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
-	button.position(10,10);
+	button.position(60,60);
+    button.size(30);
 
 	for (var i=0; i<50; i++) {
         balls.push(new Ball());
