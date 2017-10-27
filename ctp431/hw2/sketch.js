@@ -19,6 +19,8 @@ var accChangeT = 0;
 
 function preload() {
 	song = loadSound("Klaatu.mp3");
+	document.getElementById("loading").innerHTML = "Loading...";
+
 }
 
 function setup() {
@@ -29,22 +31,24 @@ function setup() {
 	
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
+	button = createButton("microphone");
+	button.mousePressed(micStart);
 
 	
 	for (var i=0; i<50; i++) {
         balls.push(new Ball());
     }
 	
-    mic = new p5.AudioIn();
-    mic.start();
+    
 	fft = new p5.FFT(0.9, 1024);
 	w = width / 200;
-	fft.setInput(mic);
+
 }
 
 
 function loaded() {
 	console.log("loaded")
+	document.getElementById("loading").innerHTML = "Song Loaded";
 }
 
 function togglePlaying() {
@@ -56,6 +60,13 @@ function togglePlaying() {
 		button.html("play");
 	}
 }
+
+function micStart() {
+	mic = new p5.AudioIn();
+    mic.start();
+	fft.setInput(mic);
+}
+
 
 // Ball class
 function Ball() {
