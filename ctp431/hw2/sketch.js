@@ -35,21 +35,21 @@ function setup() {
     mic.start();
     amplitude = new p5.Amplitude();
 
+    //text("Loading...", 10, 10);
+
+    fft.setInput(song);
     fft = new p5.FFT(0.9, 1024);
-    
+
 	w = width / 200;
 }
 
 function preload() {
-	song = loadSound("Klaatu.mp3", loaded);
-	createP("Loading...");
-
+	song = loadSound("Klaatu.mp3");
 }
 
 function loaded() {
 	console.log("loaded")
-	createP("Song Loaded");
-    fft.setInput(song);
+	//text("Song Loaded", 10, 20);
 }
 
 function togglePlaying() {
