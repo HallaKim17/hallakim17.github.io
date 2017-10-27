@@ -6,7 +6,6 @@ var height;
 var sum = 0;
 var button;
 var song;
-var amplitude;
 
 //balls
 var balls = [];     
@@ -33,11 +32,10 @@ function setup() {
 
     mic = new p5.AudioIn();
     mic.start();
-    amplitude = new p5.Amplitude();
 
     //text("Loading...", 10, 10);
 
-    fft.setInput(song);
+    //fft.setInput(song);
     fft = new p5.FFT(0.9, 1024);
 
 	w = width / 200;
@@ -114,7 +112,7 @@ function draw() {
     // viewer's pespective
 	//camera(100, 300, -300);
 	
-    var vol = amplitude.getLevel();
+    var vol = mic.getLevel();
 	ellipse(250, 100, 50+vol*360, 50+vol*360);
 	
 	var spectrum = fft.analyze();
