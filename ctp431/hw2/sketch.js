@@ -54,6 +54,7 @@ function loaded() {
 
 function togglePlaying() {
 	if (!song.isPlaying()) {
+		song.setVolume(0.3);
 		song.play();
         button.html("pause");
 	} else {
