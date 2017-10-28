@@ -18,15 +18,15 @@ var accChangeT = 0;
 
 
 function setup() {
+	button = createButton("play");
+	button.mousePressed(togglePlaying);
+	//button.position(10,85);
+    button.size(50);
+
 	width = 1000;
     height = 500;
 	var canvas = createCanvas(width, height);
 	colorMode(HSB);
-	
-	button = createButton("play");
-	button.mousePressed(togglePlaying);
-	button.position(10,85);
-    button.size(30);
 
 	for (var i=0; i<50; i++) {
         balls.push(new Ball());
