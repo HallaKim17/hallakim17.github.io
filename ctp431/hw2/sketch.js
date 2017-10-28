@@ -18,10 +18,9 @@ var accChangeT = 0;
 
 
 function setup() {
-	createP("Respond to the saying of occupants of interplanetary craft. The frequency spectrum is matched to calling of extraterrestrial, and the moon above to our(the Earth's) response. Say anything you want, then they'll hear you. You can sing along the lyrics or just say any words. This song is: 'Calling Occupants of Interplanetary Craft' by Klaatu. Enjoy!");
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
-	//button.position(10,85);
+	button.position(10,100);
     button.size(50);
 
 	width = 1000;
