@@ -16,17 +16,33 @@ var accChangeT = 0;
 
 
 
+var DEPTH = 48; // 48
+var NUM_SPEC_BINS = 1024;
+var spec_array = new Array();
+
+for (i=0;i<DEPTH;i++) {
+	spec_array[i]=new Array();
+	for (j=0;j<NUM_SPEC_BINS;j++) {
+		spec_array[i][j]=0;
+	}
+}
+
+// x[5][12] = 3.0;
+var cur_spec_index = 0;
+
+
+
 
 function setup() {
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
-	button.position(10,300);
+	button.position(10,285);
     button.size(200);
     createP(" ");
 
 	width = 1000;
     height = 500;
-	var canvas = createCanvas(width, height);
+	var canvas = createCanvas(width, height, WEBGL);
 	colorMode(HSB);
 
 	for (var i=0; i<50; i++) {
@@ -39,7 +55,7 @@ function setup() {
     //text("Loading...", 10, 10);
 
     //fft.setInput(song);
-    fft = new p5.FFT(0.9, 1024);
+    fft = new p5.FFT(0.9, NUM_SPEC_BINS);
 
 	w = width / 200;
 }
@@ -122,7 +138,43 @@ function draw() {
 	var spectrum = fft.analyze();
 
 
-	for (var i = 0; i < spectrum.length; i++) {
+    // store current spectrum
+ 	for (var i = 0; i < spectrum.length; i++) {
+ 		spec_array[cur_spec_index][i] = spectrum[i];
+ 	}
+
+ 	// draw spectrum using a 2D-circular buffer
+ 	for (var i = 0; i < DEPTH; i++) {
+ 		array_index = cur_spec_index - i;
+ 		if (array_index < 0) {
+ 			array_index = array_index + DEPTH;
+ 		}
+
+ 		beginShape();
+ 		for (var k = 0; k < spectrum.length; k++) {
+			var y = map(spec_array[array_index][k], 0, 640, height, 0);
+			var x = map(k, 0, spectrum.length, 0, width); 
+			vertex(x-width/2, y/2-height/2, 0-i*35);
+		}
+		endShape();
+
+		// gradation 
+		fill(100-i/DEPTH*100, 255 - i/DEPTH*255, 100-i/DEPTH*100);
+
+	}	
+
+	cur_spec_index = cur_spec_index + 1;
+ 	if (cur_spec_index == DEPTH)
+ 		cur_spec_index = 0;
+
+
+
+
+
+
+
+
+	/*for (var i = 0; i < spectrum.length; i++) {
 		sum = sum + spectrum[i];
 	}
 
@@ -140,8 +192,8 @@ function draw() {
 		balls[j].turn();
 		/*if (balls[j].y > 400 - spectrum[floor(balls[j].x)]) {
         	this.y = 400 - spectrum[floor(balls[j].x)];
-			this.direction = -this.direction;*/
-	}
+			this.direction = -this.direction;
+	}*/
 }
 	
 
