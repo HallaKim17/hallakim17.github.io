@@ -21,7 +21,7 @@ var accChangeT = 0;
 function setup() {
 	button = createButton("play");
 	button.mousePressed(togglePlaying);
-	button.position(10,285);
+	button.position(10,270);
     button.size(200);
     createP(" ");
 
