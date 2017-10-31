@@ -27,7 +27,7 @@ function setup() {
 
 	width = 1000;
     height = 500;
-	var canvas = createCanvas(width, height, WEBGL);
+	var canvas = createCanvas(width, height);
 	colorMode(HSB);
 
 	for (var i=0; i<50; i++) {
