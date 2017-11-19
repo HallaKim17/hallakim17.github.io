@@ -3,36 +3,40 @@ var context = new AudioContext()
 var synth;
 
 var synth_params = {
-	lfoRate:0,
-	lfoDepth: 5,
+	lfoRate:24.0,
+	lfoDepth: 2,
 	filterCutoffFreq:5000,
 	filterQ:1,
-	filterEnvAttackTime: 0.1,
-	filterEnvDecayTime: 0.2,
-	filterEnvSustainLevel: 0.9,
+	filterEnvAttackTime: 0.03,
+	filterEnvDecayTime: 0.03,
+	filterEnvSustainLevel: 0.40,
 	filterEnvReleaseTime: 0.1,
-	ampEnvAttackTime: 0.1,
-	ampEnvDecayTime: 0.2,
-	ampEnvSustainLevel: 0.9,
-	ampEnvReleaseTime: 0.1
+	ampEnvAttackTime: 0.08,
+	ampEnvDecayTime: 0.25,
+	ampEnvSustainLevel: 0.45,
+	ampEnvReleaseTime: 0.45
 };
 
 var delay_params = {
-	delayTime: 0.3,
-	delayFeedbackGain: 0.2,
-	delayWetDry: 0.1
+	delayTime: 0.12,
+	delayFeedbackGain: 0.10,
+	delayWetDry: 0.10
 }
 var reverb_params = {
-	reverbWetDry: 0.5
+	reverbWetDry: 0.12
 };
+
 
 // default
 var temp = context.createOscillator();
 
 var synth = new Synth(context, synth_params);
-var delay = new Delay(context, delay_params);
+var reverb = new Reverb(context, reverb_params);
+var delay = new Delay(context, reverb.input, delay_params);
 
 synth.connect(delay);
+
+
 
 // launch MIDI 	
 if (navigator.requestMIDIAccess)
@@ -44,6 +48,21 @@ else
 nx.onload = function() {
 
 	// OSC
+    gui_lfo_rate.min = 0;
+    gui_lfo_rate.max = 30;	
+    gui_lfo_depth.min = 0;
+	gui_lfo_depth.max = 10;	
+
+	gui_lfo_rate.set({ value: synth_params.lfoRate })
+	gui_lfo_rate.on('*',function(data) {
+		synth.updateParams('lfoRate', data.value);
+	});
+
+    gui_lfo_depth.set({ value: synth_params.lfoDepth })
+	gui_lfo_depth.on('*',function(data) {
+		synth.updateParams('lfoDepth', data.value);
+	});	
+
 
 	// Filter
 	gui_filter_freq.min = 100;	
@@ -97,6 +116,14 @@ nx.onload = function() {
 	gui_delay_wet_dry.set({ value: delay_params.delayWetDry })
 	gui_delay_wet_dry.on('*',function(data) {
 		delay.updateParams('delay_dry_wet', data.value);
+	});
+
+	// reverb
+    gui_reverb_time.min = 0;
+	gui_reverb_time.max = 1;
+	gui_reverb_time.set({ value: reverb_params.reverbWetDry })
+	gui_reverb_time.on('*',function(data) {
+		reverb.updateParams('reverb_dry_wet', data.value);
 	});
 
 	// Keyboard 	

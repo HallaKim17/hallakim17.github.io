@@ -9,6 +9,13 @@ var Voice = function(context, frequency, amplitude, parameters, effect_node) {
 		this.voiceState = 0;	
 	};
 
+	// lfo
+	this.lfo = context.createOscillator();
+	this.lfo.type = 'sine';
+	this.lfo.frequency.value = parameters.lfoRate;
+	this.lfoDepth = context.createGain();
+	this.lfoDepth.gain.value = parameters.lfoDepth;
+
 	// filter 
 	this.filter = context.createBiquadFilter();
 
@@ -16,12 +23,13 @@ var Voice = function(context, frequency, amplitude, parameters, effect_node) {
 	this.ampEnv = context.createGain();
 
 	// connect
+	this.lfo.connect(this.lfoDepth)
+	this.lfoDepth.connect(this.osc.frequency);
+
 	this.osc.connect(this.filter);
 	this.filter.connect(this.ampEnv);
+	this.ampEnv.connect(effect_node); 
 
-	//this.ampEnv.connect(context.destination);
-	//this.output = this.ampEnv;
-	this.ampEnv.connect(effect_node);
 
 	// preset parameters 
 	this.osc.frequency.value = frequency;
@@ -35,6 +43,11 @@ var Voice = function(context, frequency, amplitude, parameters, effect_node) {
 	this.ampEnvSustainLevel = parameters.ampEnvSustainLevel;
 	this.ampEnvReleaseTime = parameters.ampEnvReleaseTime;
 
+	this.filterEnvAttackTime = parameters.filterEnvAttackTime;
+	this.filterEnvDecayTime = parameters.filterEnvDecayTime;
+	this.filterEnvSustainLevel = parameters.filterEnvSustainLevel;
+	this.filterEnvReleaseTime = parameters.filterEnvReleaseTime;
+
 	this.osc.type = 'square';
 	this.filter.type = 'lowpass';
 	this.filter.frequency.value = 5000;
@@ -45,8 +58,10 @@ var Voice = function(context, frequency, amplitude, parameters, effect_node) {
 };
 
 Voice.prototype.on = function() {
+	this.lfo.start();
 	this.osc.start();
 	this.triggerAmpEnvelope();
+	this.trigger_freq_AmpEnvelope();
 
 	this.voiceState = 1;
 };
@@ -65,6 +80,25 @@ Voice.prototype.triggerAmpEnvelope = function() {
 	param.linearRampToValueAtTime(this.ampEnvLevel * this.ampEnvSustainLevel, now + this.ampEnvAttackTime + this.ampEnvDecayTime);
 };
 
+
+
+Voice.prototype.trigger_freq_AmpEnvelope = function() {
+	var param = this.filter.frequency;
+	var now = this.context.currentTime;
+
+	param.cancelScheduledValues(now);
+
+	// attack
+	param.setValueAtTime(this.filter.frequency.value, now);
+	param.linearRampToValueAtTime(this.filterCutoffFreq, now + this.filterEnvAttackTime);
+
+	// decay,release
+	param.linearRampToValueAtTime(this.filterCutoffFreq * this.filterEnvSustainLevel, now + this.filterEnvAttackTime + this.filterEnvDecayTime);
+};
+
+
+
+
 Voice.prototype.off = function() {
 	var param = this.ampEnv.gain;
 	var now = this.context.currentTime;
@@ -73,6 +107,7 @@ Voice.prototype.off = function() {
 	param.setValueAtTime(param.value, now);
 	param.exponentialRampToValueAtTime(0.001, now + this.ampEnvReleaseTime);
 	this.osc.stop(now + this.ampEnvReleaseTime);
+	this.lfo.stop(now + this.ampEnvReleaseTime);
 };
 
 
@@ -138,7 +173,13 @@ Synth.prototype.updateParams = function(params, value) {
 			break;		
 		case 'amp_release_time':
 			this.parameters.ampEnvReleaseTime = value;
-			break;		
+			break;	
+		case 'lfoRate':
+			this.parameters.lfoRate = value;
+			break;
+		case 'lfoDepth':
+			this.parameters.lfoDepth = value;
+			break;	
 	}
 }
 

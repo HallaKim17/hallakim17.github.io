@@ -1,9 +1,10 @@
-var Delay = function(context, parameters) {
+var Delay = function(context, reverbOutput, parameters) {
 
 	this.context = context;
-	this.input = context.createGain();
+	this.parameters = parameters;
 
 	// create nodes
+	this.input = context.createGain();
 	this.delayLine = context.createDelay();
 	this.feedbackGain = context.createGain();
 	this.wetGain = context.createGain(); 
@@ -16,9 +17,9 @@ var Delay = function(context, parameters) {
 	this.feedbackGain.connect(this.delayLine);
 
 	this.input.connect(this.dryGain);
-
-	this.dryGain.connect(this.context.destination);
-	this.wetGain.connect(this.context.destination);
+	
+	this.dryGain.connect(reverbOutput);
+	this.wetGain.connect(reverbOutput);
 
 	this.delayLine.delayTime.value = parameters.delayTime;
 	this.feedbackGain.gain.value = parameters.delayFeedbackGain;
@@ -26,7 +27,6 @@ var Delay = function(context, parameters) {
 	this.wetGain.gain.value = parameters.delayWetDry;
 	this.dryGain.gain.value = (1-parameters.delayWetDry);
 
-	this.parameters = parameters;
 }
 
 
@@ -48,5 +48,8 @@ Delay.prototype.updateParams = function (params, value) {
 			break;		
 	}
 }
+
+
+
 
 
