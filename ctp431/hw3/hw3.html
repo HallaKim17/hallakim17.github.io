@@ -14,7 +14,8 @@
 <body>
 	<h1> Homework #3: Music Synthesizer </h1>
 	<p> 20174251 김한라 </p>
-	<p> <a href="http://www.openairlib.net/auralizationdb/content/york-minster">Impulse response from York Minster<a>, the largest medieval gothic cathedral in the UK, is used. </p>
+	<p> This is a Web Audio Synthesizer for CTP431 homework 3.</p>
+	<p> What I added: I connected the LFO depth to the freqeuncy of an original oscillator. To make a filter envelope, I added a function 'trigger_freq_Envelope', which is similar to a function 'triggerAmpEnvelope' but takes filter frequency as an input. I also added reverb.js to apply reverberation effect using impulse response. The sound flows from oscillator, filter, ampEnv, delay, and reverb node. For convolution in reverb.js, <a href="http://www.openairlib.net/auralizationdb/content/york-minster">impulse response</a> from York Minster, the largest medieval gothic cathedral in the UK, is used. </p>
 
 	<div id="dummy">
 	<p class="panelLabel"> CTP431 Synth </p>

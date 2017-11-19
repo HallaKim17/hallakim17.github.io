@@ -61,7 +61,7 @@ Voice.prototype.on = function() {
 	this.lfo.start();
 	this.osc.start();
 	this.triggerAmpEnvelope();
-	this.trigger_freq_AmpEnvelope();
+	this.trigger_freq_Envelope();
 
 	this.voiceState = 1;
 };
@@ -82,7 +82,7 @@ Voice.prototype.triggerAmpEnvelope = function() {
 
 
 
-Voice.prototype.trigger_freq_AmpEnvelope = function() {
+Voice.prototype.trigger_freq_Envelope = function() {
 	var param = this.filter.frequency;
 	var now = this.context.currentTime;
 
