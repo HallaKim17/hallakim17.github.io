@@ -5,7 +5,7 @@ var inputs = [];
 var button;
 var add_return_message;
 var circle;
-var melody_notes = ['C4','D4','E4','F4','G4','A4','B4','C5','D5','E5','F5','G5','A5','B5','C6','C4','D4','E4','F4','G4','A4','B4','C5','D5']
+var melody_notes = ['.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.','.']
 var noteName;
 
 //GUI parameters
@@ -26,31 +26,36 @@ var slider1;
 var slider2;
 var slider3; 
 var slider4;
-var show_text1 = false;
+var text_on_circle1 = false;
+var text_on_circle2 = false;
+var text_on_circle3 = false;
+var text_on_circle4 = false;
+
+var melody_example = ['C3 C3 C3 F3 F3 G3', '. G4 E4 G4 D4 C4', 'G5 . . F5 E5 C5', 'E6 . . D6 C6 G6'];  
+var tempo_example = [2, 4, 6, 2];
+
 
 function setup() {
+    console.log(melody_notes.length);
 	createCanvas(windowWidth, windowHeight);
     angleMode(DEGREES);
 
     for(var i = 0; i < 4; i++) {
-    	input = createInput();
-    	input.position(850, 60 + 200*i);
+    	input = createInput(melody_example[i]);
+    	input.position(850, 80 + 200*i);
         inputs.push(input);
 
-        //input[0].value('C4,C4,C4,C4,C4,C4')
-        //input[1].value('E4,E4,E4,E4,E4,E4')
-        //input[2].value('G4,G4,G4,G4,G4,G4')
-        //input[3].value('D4,E4,C4,G5,F5,E5')
-
 	    button = createButton('Set melody'); 
-        console.log(button)
-	    button.position(input.x + input.width, 60 + 200*i);
+	    button.position(input.x + input.width, 80 + 200*i);
         buttons.push(button);
-        console.log(buttons);
+
+        reset_button = createButton('Reset');
+        reset_button.position(850, 770);
+        reset_button.size(60);
 	    
 
 	    add_melody_message = createDiv('Type your melody');
-	    add_melody_message.style('position', 850, 40 + 200*i);
+	    add_melody_message.style('position', 850, 60 + 200*i);
         add_melody_message.style('color', '#ffffff')
 
 	    add_return_message = createElement('h3','');
@@ -64,33 +69,38 @@ function setup() {
     buttons[1].mousePressed(addMelody_from_button2);
     buttons[2].mousePressed(addMelody_from_button3);
     buttons[3].mousePressed(addMelody_from_button4);
+    reset_button.mousePressed(reset_melody);
 
     orbit1_message = createDiv('1st Orbit: ');
     orbit1_message.style('position', 850, 24);
     orbit1_message.style('color', '#e03830');
+    orbit1_message.style('font-size', '30px');
 
     orbit2_message = createDiv('2nd Orbit: ');
     orbit2_message.style('position', 850, 224);
     orbit2_message.style('color', '#d37eae');
+    orbit2_message.style('font-size', '30px');
 
     orbit3_message = createDiv('3rd Orbit: ');
     orbit3_message.style('position', 850, 424);
     orbit3_message.style('color', '#33a059');
+    orbit3_message.style('font-size', '30px');
 
     orbit4_message = createDiv('4th Orbit: ');
     orbit4_message.style('position', 850, 624);
     orbit4_message.style('color', '#25c4e1');
+    orbit4_message.style('font-size', '30px');
 
 
 
 	// GUI setup
-    slider1 = createSlider(0, 6.0, 1.0);
+    slider1 = createSlider(0, 10.0, 2.0);
     slider1.position(inputs[0].x, 110);
-    slider2 = createSlider(0, 6.0, 1.5);
+    slider2 = createSlider(0, 10.0, 4.0);
     slider2.position(inputs[1].x, 310);
-    slider3 = createSlider(0, 6.0, 2.0);
+    slider3 = createSlider(0, 10.0, 6.0);
     slider3.position(inputs[2].x, 510);
-    slider4 = createSlider(0, 6.0, 2.5);
+    slider4 = createSlider(0, 10.0, 2.0);
     slider4.position(inputs[3].x, 710);
 
 
@@ -112,8 +122,9 @@ function setup() {
 
 
     synth = new Tone.PolySynth(24).toMaster();
-        
-    console.log(circles) 
+
+
+
 }
 
 
@@ -124,13 +135,14 @@ function draw() {
 	background(0);
 
     textSize(20);
+    text("Press all the '\Set melody'\ buttons on the right to play demo song.", 290, 65);
     text("C4   C#4/Db4   D4   D#4/Eb4   E4   F4   F#4/Gb4   G4   G#4/Ab4   A4   A#4/Bb4   B4   C5", 400, windowHeight-20);
 
     textSize(20);
-    text(inputs[0].value(), inputs[0].x + 75, 92);
-    text(inputs[1].value(), inputs[1].x + 75, 292);
-    text(inputs[2].value(), inputs[2].x + 75, 492);
-    text(inputs[3].value(), inputs[3].x + 75, 692);
+    text(inputs[0].value(), inputs[0].x + 75, 142);
+    text(inputs[1].value(), inputs[1].x + 75, 342);
+    text(inputs[2].value(), inputs[2].x + 75, 542);
+    text(inputs[3].value(), inputs[3].x + 75, 742);
 
     textSize(15);
     text(slider1.value(), inputs[0].x + 140, 117);
@@ -138,27 +150,45 @@ function draw() {
     text(slider3.value(), inputs[2].x + 140, 517);
     text(slider4.value(), inputs[3].x + 140, 717);
 
-    //ellipse(windowWidth*2/5, windowHeight/2, 60);
-    //ellipse(windowWidth*2/5, windowHeight/2, 150);
-    //ellipse(windowWidth*2/5, windowHeight/2, 240);
-    //ellipse(windowWidth*2/5, windowHeight/2, 330);
+    push();
+    textSize(40);
+    fill(170, 210, 105);
+    strokeWeight(1);
+    text("MelOrbit", 90, 40);
+    pop();
 
-    stroke('#ffffff');
-	strokeWeight(3);
+    push();
+    translate(windowWidth*2/5, windowHeight/2);
+    noFill();
+    ellipse(0,0,120);
+    ellipse(0,0,300);
+    ellipse(0,0,480);
+    ellipse(0,0,660);
+    pop();
 
-    var speed = [0.6, 0.9, 1.3, 1.8]
-	
+
 
 //////////////////////////////////////////////////////////// 1st orbit (from the center)
+
+    stroke('#ffffff');
+    strokeWeight(3);
 
 	push();
 	translate(windowWidth*2/5, windowHeight/2);
 	a1 = angle * slider1.value();
-    rotate(a1);
+    rotate(-a1);
     for(var i = 0; i < 6; i++) {
         fill('#e03830');
-    	ellipse(circles[i].x, circles[i].y, circles[i].d)
+        if((a1-circles[i].angle_circle)%360.0 == 0) {
+            fill(255);
+        }
+    	ellipse(circles[i].x, circles[i].y, circles[i].d);
+        if (text_on_circle1) {
+            fill(0);
+            text(melody_notes[i], circles[i].x, circles[i].y);
+        }
     }
+
     pop();
    
     
@@ -167,10 +197,17 @@ function draw() {
     push();
 	translate(windowWidth*2/5, windowHeight/2);
 	a2 = angle * slider2.value();
-    rotate(a2);
+    rotate(-a2);
     for(var i = 6; i < 12; i++) {
         fill('#d37eae');
-    	ellipse(circles[i].x, circles[i].y, circles[i].d)
+        if((a2-circles[i].angle_circle)%360.0 == 0) {
+            fill(255);
+        }
+    	ellipse(circles[i].x, circles[i].y, circles[i].d);
+        if (text_on_circle2) {
+            fill(0);
+            text(melody_notes[i], circles[i].x, circles[i].y);
+        }
     }
     pop();
 
@@ -180,10 +217,17 @@ function draw() {
     push();
 	translate(windowWidth*2/5, windowHeight/2);
     a3 = angle * slider3.value();
-    rotate(a3);
+    rotate(-a3);
     for(var i = 12; i < 18; i++) {
         fill('#33a059');
-    	ellipse(circles[i].x, circles[i].y, circles[i].d)
+        if((a3-circles[i].angle_circle)%360.0 == 0) {
+            fill(255);
+        }
+    	ellipse(circles[i].x, circles[i].y, circles[i].d);
+        if (text_on_circle3) {
+            fill(0);
+            text(melody_notes[i], circles[i].x, circles[i].y);
+        }
     }
     pop();
   
@@ -193,10 +237,17 @@ function draw() {
     push();
 	translate(windowWidth*2/5, windowHeight/2);
     a4 = angle * slider4.value();
-    rotate(a4);
+    rotate(-a4);
     for(var i = 18; i < 24; i++) {
         fill('#25c4e1');
+        if((a4-circles[i].angle_circle)%360.0 == 0) {
+            fill(255);
+        }
     	ellipse(circles[i].x, circles[i].y, circles[i].d)
+        if (text_on_circle4) {
+            fill(0);
+            text(melody_notes[i], circles[i].x, circles[i].y);
+        }
     }
     pop();
 
@@ -207,42 +258,37 @@ function draw() {
 
 // synth object for each circle 
     if (melody_added1) {
-        circles[0].sound(a1, melody_notes[0]);
-        circles[1].sound(a1, melody_notes[1]);
-        circles[2].sound(a1, melody_notes[2]);
-        circles[3].sound(a1, melody_notes[3]);
-        circles[4].sound(a1, melody_notes[4]);
-        circles[5].sound(a1, melody_notes[5]);
+        for(i = 0; i < 6; i++) {
+            if (melody_notes[i] != '.') {
+                circles[i].sound(a1, melody_notes[i]);
+            } 
+        }
     }
 
     if (melody_added2) {
-        circles[6].sound(a2, melody_notes[6]);
-        circles[7].sound(a2, melody_notes[7]);
-        circles[8].sound(a2, melody_notes[8]);
-        circles[9].sound(a2, melody_notes[9]);
-        circles[10].sound(a2, melody_notes[10]);
-        circles[11].sound(a2, melody_notes[11]);
+        for(i = 6; i < 12; i++) {
+            if (melody_notes[i] != '.') {
+                circles[i].sound(a2, melody_notes[i]);
+            } 
+        }
     }    
     
     if (melody_added3) {
-        circles[12].sound(a3, melody_notes[12]);
-        circles[13].sound(a3, melody_notes[13]);
-        circles[14].sound(a3, melody_notes[14]);
-        circles[15].sound(a3, melody_notes[15]);
-        circles[16].sound(a3, melody_notes[16]);
-        circles[17].sound(a3, melody_notes[17]);
+        for(i = 12; i < 18; i++) {
+            if (melody_notes[i] != '.') {
+                circles[i].sound(a3, melody_notes[i]);
+            } 
+        }
     }    
 
     if (melody_added4) {
-        circles[18].sound(a4, melody_notes[18]);
-        circles[19].sound(a4, melody_notes[19]);
-        circles[20].sound(a4, melody_notes[20]);
-        circles[21].sound(a4, melody_notes[21]);
-        circles[22].sound(a4, melody_notes[22]);
-        circles[23].sound(a4, melody_notes[23]);
+        for(i = 18; i < 24; i++) {
+            if (melody_notes[i] != '.') {
+                circles[i].sound(a4, melody_notes[i]);
+            } 
+        }
     }
 
-    
 
 }
 
@@ -251,23 +297,20 @@ function draw() {
 
 var Circle = function(bigR, j) {
 
+    this.radius = 20;
 	this.angle_circle = 360 / numShapes * j;
 	this.R = bigR;
 	this.x = cos(this.angle_circle) * bigR;
 	this.y = sin(this.angle_circle) * bigR;
-	this.d = 2 * radius;
+	this.d = 2 * this.radius;
 
 	this.rotate = function(speed) {
     	ellipse(this.x, this.y, this.d);
 	}
 
-    //this.note = default_note[j]
-	//this.sound = function(rAngle) {
-		//if((rAngle-this.angle_circle)%360.0==0) {
-			//synth.triggerAttackRelease(this.note, '16n');
-		//}
-	//}
+
 };
+
 
 Circle.prototype.sound = function(rotateAngle, new_note) {
     this.note = new_note;
@@ -279,84 +322,92 @@ Circle.prototype.sound = function(rotateAngle, new_note) {
 
 
 function addMelody_from_button1() {
-	inputArray = inputs[0].value();
+	if(inputs[0].value() == '') {
+        return 
+    }
+    inputArray = inputs[0].value();
     inputArray = inputArray.toString();
-    splitInputs = inputArray.split(',');
-
+    splitInputs = inputArray.split(' ');
+    
     for(i = 0; i < 6; i++) {
         melody_notes[i] = splitInputs[i];
     } 
-
-    //inputs[0].value('');
-
-    melody_added1 = true;
-
-    show_text1 = true;
-
-    //fill(255,255,255);
-    //text = createDiv(splitInputs) 
-    //text.position(inputs[0].x, 70);
-    //text.style('color', 255,255,255);
-    //console.log("text")
     
-
+    melody_added1 = true;
+    text_on_circle1 = true;
 }
 
 
 function addMelody_from_button2() {
+    if(inputs[1].value() == '') {
+        return 
+    }
     inputArray = inputs[1].value();
     inputArray = inputArray.toString();
-    splitInputs = inputArray.split(',');
+    splitInputs = inputArray.split(' ');
 
     for(i = 0; i < 6; i++) {
         melody_notes[i+6] = splitInputs[i];
     } 
 
-    //inputs[1].value('');
-
     melody_added2 = true;
-    
-    //add_return_message.html(n + ' is added!');
+    text_on_circle2 = true;
 
 }
 
 
 function addMelody_from_button3() {
+    if(inputs[2].value() == '') {
+        return 
+    }
     inputArray = inputs[2].value();
     inputArray = inputArray.toString();
-    splitInputs = inputArray.split(',');
+    splitInputs = inputArray.split(' ');
 
     for(i = 0; i < 6; i++) {
         melody_notes[i+12] = splitInputs[i];
     } 
 
-    //inputs[2].value('');
-
     melody_added3 = true;
-
-    //add_return_message.html(n + ' is added!');
+    text_on_circle3 = true;
 
 }
 
 
 function addMelody_from_button4() {
+    if(inputs[3].value() == '') {
+        return 
+    }
     inputArray = inputs[3].value();
     inputArray = inputArray.toString();
-    splitInputs = inputArray.split(',');
+    splitInputs = inputArray.split(' ');
 
     for(i = 0; i < 6; i++) {
         melody_notes[i+18] = splitInputs[i];
     } 
 
-    //inputs[3].value('');
-
     melody_added4 = true;
-
-    //add_return_message.html(n + ' is added!');
+    text_on_circle4 = true;
 
 }
 
+function reset_melody() {
+    melody_added1 = false;
+    melody_added2 = false;
+    melody_added3 = false;
+    melody_added4 = false;
 
+    inputs[0].value('');
+    inputs[1].value('');
+    inputs[2].value('');
+    inputs[3].value('');
+
+    text_on_circle1 = false;
+    text_on_circle2 = false;
+    text_on_circle3 = false;
+    text_on_circle4 = false;
+
+}
 
 
 
