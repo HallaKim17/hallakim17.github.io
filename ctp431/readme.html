@@ -1,0 +1,224 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<style>
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote {
+    margin: 0;
+    padding: 0;
+}
+body {
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
+    font-size: 13px;
+    line-height: 18px;
+    color: #737373;
+    background-color: white;
+    margin: 10px 13px 10px 13px;
+}
+table {
+	margin: 10px 0 15px 0;
+	border-collapse: collapse;
+}
+td,th {	
+	border: 1px solid #ddd;
+	padding: 3px 10px;
+}
+th {
+	padding: 5px 10px;	
+}
+
+a {
+    color: #0069d6;
+}
+a:hover {
+    color: #0050a3;
+    text-decoration: none;
+}
+a img {
+    border: none;
+}
+p {
+    margin-bottom: 9px;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: #404040;
+    line-height: 36px;
+}
+h1 {
+    margin-bottom: 18px;
+    font-size: 30px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 18px;
+}
+h4 {
+    font-size: 16px;
+}
+h5 {
+    font-size: 14px;
+}
+h6 {
+    font-size: 13px;
+}
+hr {
+    margin: 0 0 19px;
+    border: 0;
+    border-bottom: 1px solid #ccc;
+}
+blockquote {
+    padding: 13px 13px 21px 15px;
+    margin-bottom: 18px;
+    font-family:georgia,serif;
+    font-style: italic;
+}
+blockquote:before {
+    content:"\201C";
+    font-size:40px;
+    margin-left:-10px;
+    font-family:georgia,serif;
+    color:#eee;
+}
+blockquote p {
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 18px;
+    margin-bottom: 0;
+    font-style: italic;
+}
+code, pre {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+}
+code {
+    background-color: #fee9cc;
+    color: rgba(0, 0, 0, 0.75);
+    padding: 1px 3px;
+    font-size: 12px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+pre {
+    display: block;
+    padding: 14px;
+    margin: 0 0 18px;
+    line-height: 16px;
+    font-size: 11px;
+    border: 1px solid #d9d9d9;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+pre code {
+    background-color: #fff;
+    color:#737373;
+    font-size: 11px;
+    padding: 0;
+}
+sup {
+    font-size: 0.83em;
+    vertical-align: super;
+    line-height: 0;
+}
+* {
+	-webkit-print-color-adjust: exact;
+}
+@media screen and (min-width: 914px) {
+    body {
+        width: 854px;
+        margin:10px auto;
+    }
+}
+@media print {
+	body,code,pre code,h1,h2,h3,h4,h5,h6 {
+		color: black;
+	}
+	table, pre {
+		page-break-inside: avoid;
+	}
+}
+</style>
+<title>CTP431 Final Project 20174251</title>
+
+</head>
+<body>
+<h1>CTP431 Final Project 20174251</h1>
+
+<h2>MelOrbit</h2>
+
+<hr />
+
+<h3>1. Introduction</h3>
+
+<p>I love to explore new kind of chords. It is exciting to hear different melodies of each part of a choir form a perfect harmony. This project was started from this point. This imitates the planets of solar system. However, unlike the real solar system it has multiple planets on the single orbit. There are four orbits each representing single part of a choir. This way, distinct melodies become a beautiful harmony. Enjoy being a conductor of Melody Orbits(<strong>MelOrbit</strong>)!</p>
+
+<h3>2. Components</h3>
+
+<p><img src="/Users/bkim/my_project/MelOrbit.png" alt="Drawing" style="width: 600px;"/></p>
+
+<h4>[Visualizer] Orbits</h4>
+
+<p>Four orbits visulize the melody being played which you type as an input. An orbit has six circles that indicate six musical notes each. Everytime the circle makes a single rotation, the note assigned to the circle is played.</p>
+
+<h4>[Input] Type your melody</h4>
+
+<p>You can type any melody you want inside an input element. Examples of key name are shown below the project page. <strong>Put a SPACE when you type keys one after another</strong>. <strong>If you want to make interval between notes, please type DOT notation(.)</strong>. Otherwise it won't work.
+<img src="/Users/bkim/my_project/exampleNote_1.jpeg" alt="Drawing" style="width: 400px;"/><br>
+For example, to play the score of the image above, this should be typed.<br></p>
+
+<blockquote><p><strong>C4 C4 . C4 . C4</strong> <br></p></blockquote>
+
+<h4>[Button] Set melody</h4>
+
+<p>After typing your melody, click 'set melody' button to play it. The circles of corresponding orbit shows the name of the notes.</p>
+
+<h4>[Button] Mute</h4>
+
+<p>Click 'Mute' button to stop playing the melody of corresponding orbit.</p>
+
+<h4>[Slider] Tempo</h4>
+
+<p>Change tempo by adjusting the slider. Tempo is visualized as the rotation speed of the circles.</p>
+
+<h4>[Button] Reset</h4>
+
+<p>Click 'Reset' button to remove all the melodies for all orbits.</p>
+
+<h3>3. Codes</h3>
+
+<ul>
+<li>index.html</li>
+<li>sketch.js</li>
+<li>p5.js</li>
+<li>Tone.js</li>
+</ul>
+
+
+<h3>4. Limitation</h3>
+
+<ul>
+<li>As each orbit contains six circles, it can play score sheets described only for 3/4 or 6/8. I tried to add more circles in order to play 4/4 music. But after I added circles, visualization became slow with rotation process not shown smoothly.</li>
+</ul>
+
+
+<hr />
+
+<h3>Go to Play MelOrbit:</h3>
+
+<p><a href="http://hallakim17.github.io/ctp431/final_project/index.html">http://hallakim17.github.io/ctp431/final_project/index.html</a></p>
+</body>
+</html>
