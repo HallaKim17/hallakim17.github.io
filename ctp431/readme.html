@@ -17,7 +17,7 @@ blockquote {
 }
 body {
     font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", Arial, sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 18px;
     color: #737373;
     background-color: white;
@@ -47,6 +47,8 @@ a img {
 }
 p {
     margin-bottom: 9px;
+    font-size: 150%;
+    line-height: 2em;
 }
 h1,
 h2,
@@ -60,6 +62,7 @@ h6 {
 h1 {
     margin-bottom: 18px;
     font-size: 30px;
+    text-align: center;
 }
 h2 {
     font-size: 24px;
@@ -157,67 +160,79 @@ sup {
 </head>
 <body>
 <h1>CTP431 Final Project 20174251</h1>
-
-<h2>MelOrbit</h2>
+<h2 style="text-align: center;">MelOrbit</h2>
+<h3>Halla Kim</h3>
 
 <hr />
 
-<h3>1. Introduction</h3>
+<h2>1. Introduction</h2>
 
 <p>I love to explore new kind of chords. It is exciting to hear different melodies of each part of a choir form a perfect harmony. This project was started from this point. This imitates the planets of solar system. However, unlike the real solar system it has multiple planets on the single orbit. There are four orbits each representing single part of a choir. This way, distinct melodies become a beautiful harmony. Enjoy being a conductor of Melody Orbits(<strong>MelOrbit</strong>)!</p>
-
-<h3>2. Components</h3>
-
-<p><img src="/Users/bkim/my_project/MelOrbit.png" alt="Drawing" style="width: 600px;"/></p>
-
-<h4>[Visualizer] Orbits</h4>
+<br>
+<br>
+<h2>2. Components</h2>
+<br>
+<img src="/Users/bkim/my_project/MelOrbit.png" alt="Project Screen" style="width:600px;height:400px">
+<ul>
+<li><h3>[Visualizer] Orbits</h3></li>
 
 <p>Four orbits visulize the melody being played which you type as an input. An orbit has six circles that indicate six musical notes each. Everytime the circle makes a single rotation, the note assigned to the circle is played.</p>
 
-<h4>[Input] Type your melody</h4>
+<li><h3>[Input] Type your melody</h3></li>
 
-<p>You can type any melody you want inside an input element. Examples of key name are shown below the project page. <strong>Put a SPACE when you type keys one after another</strong>. <strong>If you want to make interval between notes, please type DOT notation(.)</strong>. Otherwise it won't work.
-<img src="/Users/bkim/my_project/exampleNote_1.jpeg" alt="Drawing" style="width: 400px;"/><br>
-For example, to play the score of the image above, this should be typed.<br></p>
+<p>You can type any melody you want inside an input element. Examples of key name are shown below the project page. Put a <strong>SPACE</strong> when you type keys one after another. If you want to make interval between notes, please type <strong>DOT notation(.)</strong>. Otherwise it won't work.
+<ul>
+<li><p style="color:blue">Distinction between notes: <span style="color:black">Space( )</span></p></li>
+<li><p style="color:blue">Interval of slience: <span style="color:black">Dot notation(.)</span></p></li>
+</ul>
+<img src="/Users/bkim/my_project/exampleNote_1.jpeg" alt="Note example" style="width:400px;height:300px"><br>
+<p>For example, to play the score of the image above, this should be typed:</p></p>
 
-<blockquote><p><strong>C4 C4 . C4 . C4</strong> <br></p></blockquote>
+<blockquote><p style="font-size:160%;"><strong>C4 C4 . C4 . C4</strong> <br></p></blockquote>
 
-<h4>[Button] Set melody</h4>
+<li><h3>[Button] Set melody</h3></li>
 
 <p>After typing your melody, click 'set melody' button to play it. The circles of corresponding orbit shows the name of the notes.</p>
 
-<h4>[Button] Mute</h4>
+<li><h3>[Button] Mute</h3></li>
 
 <p>Click 'Mute' button to stop playing the melody of corresponding orbit.</p>
 
-<h4>[Slider] Tempo</h4>
+<li><h3>[Slider] Tempo</h3></li>
 
 <p>Change tempo by adjusting the slider. Tempo is visualized as the rotation speed of the circles.</p>
 
-<h4>[Button] Reset</h4>
-
+<li><h3>[Button] Reset</h3></li>
 <p>Click 'Reset' button to remove all the melodies for all orbits.</p>
+</ul>
 
-<h3>3. Codes</h3>
+<br>
+<br>
+
+<h2>3. Codes</h2>
 
 <ul>
-<li>index.html</li>
-<li>sketch.js</li>
-<li>p5.js</li>
-<li>Tone.js</li>
+<li><p>index.html</p></li>
+<li><p>sketch.js</p></li>
+<li><p>p5.js</p></li>
+<li><p>Tone.js</p></li>
 </ul>
 
 
-<h3>4. Limitation</h3>
+<br>
+<br>
 
-<ul>
-<li>As each orbit contains six circles, it can play score sheets described only for 3/4 or 6/8. I tried to add more circles in order to play 4/4 music. But after I added circles, visualization became slow with rotation process not shown smoothly.</li>
-</ul>
+<h2>4. Good parts and Limitations</h2>
 
+<p>Listening to popular music, chord is not just a set of multiple keys. Rather, it is an arrangement of keys changing its pitch along the time axis. Thus, harmony is more than components of keys. Based on this idea, this project aims to explore creative arrangement of musical notes. </p>
+<p>As each orbit contains six circles, it can only play score sheets described as 3/4 or 6/8. I tried to add more circles in order to play 4/4 music. But after I added circles, visualization became slow with rotation process not shown smoothly. It would have been more useful if many number of notes were available. Secondly, I considered breaking the convention for making music such as chromatic scale(12 pitches) or note value(e.g. quarter-note, half-note). Using continuous range of pitch and duration is also more compatible with the visualization part, since orbits have continuous range of radius and rotation speed. This might allow us to hear experimental sound but instead might be really hard to make a pleasant harmony. So, I decided to follow conventions.</p>
 
+<br>
+<br>
+<br>
 <hr />
 
-<h3>Go to Play MelOrbit:</h3>
+<h2>Go to Play MelOrbit:</h2>
 
 <p><a href="http://hallakim17.github.io/ctp431/final_project/index.html">http://hallakim17.github.io/ctp431/final_project/index.html</a></p>
 </body>
