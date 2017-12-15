@@ -14,6 +14,7 @@ var radius = 10;
 var circles = [];
 var synth;
 var buttons = [];
+var mute_buttons = [];
 var a1;
 var a2;
 var a3;
@@ -49,6 +50,10 @@ function setup() {
 	    button.position(input.x + input.width, 80 + 200*i);
         buttons.push(button);
 
+        mute_button = createButton('Mute');
+        mute_button.position(input.x + input.width + 32, 107 + 200*i);
+        mute_buttons.push(mute_button);
+
         reset_button = createButton('Reset');
         reset_button.position(850, 770);
         reset_button.size(60);
@@ -69,6 +74,10 @@ function setup() {
     buttons[1].mousePressed(addMelody_from_button2);
     buttons[2].mousePressed(addMelody_from_button3);
     buttons[3].mousePressed(addMelody_from_button4);
+    mute_buttons[0].mousePressed(mute_orbit1);
+    mute_buttons[1].mousePressed(mute_orbit2);
+    mute_buttons[2].mousePressed(mute_orbit3);
+    mute_buttons[3].mousePressed(mute_orbit4);
     reset_button.mousePressed(reset_melody);
 
     orbit1_message = createDiv('1st Orbit: ');
@@ -138,6 +147,14 @@ function draw() {
     text("Press all the '\Set melody'\ buttons on the right to play demo song.", 290, 65);
     text("C4   C#4/Db4   D4   D#4/Eb4   E4   F4   F#4/Gb4   G4   G#4/Ab4   A4   A#4/Bb4   B4   C5", 400, windowHeight-20);
 
+    push();
+    textSize(17);
+    fill(150, 190, 95);   
+    strokeWeight(0); 
+    text("* Should be 6 notes", 750, 40)
+    text("* dot(.): No note", 738, 60)
+    pop();
+
     textSize(20);
     text(inputs[0].value(), inputs[0].x + 75, 142);
     text(inputs[1].value(), inputs[1].x + 75, 342);
@@ -164,7 +181,9 @@ function draw() {
     ellipse(0,0,300);
     ellipse(0,0,480);
     ellipse(0,0,660);
+    line(0,0,330,0);
     pop();
+
 
 
 
@@ -328,6 +347,9 @@ function addMelody_from_button1() {
     inputArray = inputs[0].value();
     inputArray = inputArray.toString();
     splitInputs = inputArray.split(' ');
+    if(splitInputs.length < 6) {
+        return
+    }
     
     for(i = 0; i < 6; i++) {
         melody_notes[i] = splitInputs[i];
@@ -341,10 +363,13 @@ function addMelody_from_button1() {
 function addMelody_from_button2() {
     if(inputs[1].value() == '') {
         return 
-    }
+    } 
     inputArray = inputs[1].value();
     inputArray = inputArray.toString();
     splitInputs = inputArray.split(' ');
+    if(splitInputs.length < 6) {
+        return
+    }
 
     for(i = 0; i < 6; i++) {
         melody_notes[i+6] = splitInputs[i];
@@ -363,6 +388,9 @@ function addMelody_from_button3() {
     inputArray = inputs[2].value();
     inputArray = inputArray.toString();
     splitInputs = inputArray.split(' ');
+    if(splitInputs.length < 6) {
+        return
+    }
 
     for(i = 0; i < 6; i++) {
         melody_notes[i+12] = splitInputs[i];
@@ -381,6 +409,9 @@ function addMelody_from_button4() {
     inputArray = inputs[3].value();
     inputArray = inputArray.toString();
     splitInputs = inputArray.split(' ');
+    if(splitInputs.length < 6) {
+        return
+    }
 
     for(i = 0; i < 6; i++) {
         melody_notes[i+18] = splitInputs[i];
@@ -390,6 +421,24 @@ function addMelody_from_button4() {
     text_on_circle4 = true;
 
 }
+
+
+function mute_orbit1() {
+    melody_added1 = false;
+}
+
+function mute_orbit2() {
+    melody_added2 = false;
+}
+
+function mute_orbit3() {
+    melody_added3 = false;
+}
+
+function mute_orbit4() {
+    melody_added4 = false;
+}
+
 
 function reset_melody() {
     melody_added1 = false;
